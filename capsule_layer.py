@@ -18,7 +18,7 @@ import numpy as np
 USE_CUDA = True
 vocab_size = 17327
 embedding_dim = 300
-embedding_path = 'save/embedding_matrix.npy'
+embedding_path = '../save/embedding_matrix.npy'
 BATCH_SIZE = 64
 gru_len = 128
 Routings = 5
