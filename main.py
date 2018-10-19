@@ -83,7 +83,7 @@ for word, i in word2index.items():
 max_features = len(word_set) + 1
 
 # 保存成embedding_matrix.npy，后面跑神经网络的时候会读取
-np.save('save/embedding_matrix',arr=embedding_matrix)
+np.save('../save/embedding_matrix',arr=embedding_matrix)
 
 # 长度补齐，这里用的是keras里面的方法，也可以用我自己写的BOW里面的方法，0补在后面，跑双向RNN不影响
 def get_padding_data(maxlen=100):
