@@ -48,10 +48,9 @@ mlb = MultiLabelBinarizer()
 data_tmp['hh'] = mlb.fit_transform(data_tmp.label).tolist()
 y_train = np.array(data_tmp.hh.tolist())
 # 构造embedding字典
-bow = BOW(data_tmp.content.apply(jieba.lcut).tolist(), min_count=1, maxlen=100)
+bow = BOW(data_tmp.content.apply(jieba.lcut).tolist(), min_count=1, maxlen=100) # 长度补齐或截断固定长度100
 
 word2vec = Word2Vec(a.content.apply(jieba.lcut).tolist(),size=300,min_count=1)
-
 word_embed_dict = {}
 def get_word_embed_dict():
     for i in word2vec.wv.vocab:
