@@ -32,6 +32,7 @@ from capsule_layer import *
 
 # 以训练数据为例
 data = pd.read_csv('data/train.csv')
+data['content'] = data.content.map(lambda x: ''.join(x.strip().split()))
 
 # 把主题和情感拼接起来，一共10*3类
 data['label'] = data['subject'] + data['sentiment_value'].astype(str)
@@ -39,32 +40,17 @@ subj_lst = list(filter(lambda x : x is not np.nan, list(set(data.label))))
 subj_lst_dic = {value:key for key, value in enumerate(subj_lst)}
 data['label'] = data['label'].apply(lambda x : subj_lst_dic.get(x))
 
-# 构造embedding字典
-train_dict = {}
-for ind, row in train_df.iterrows():
-    content, label = row['content'], row['label']
-    if train_dict.get(content) is None:
-        train_dict[content] = set([label])
-    else:
-        train_dict[content].add(label)
-        
-conts = []
-labels = []
-for k, v in train_dict.items():
-    conts.append(k)
-    labels.append(v)
-
+# 处理同一个句子对应对标签的情况，然后进行MLB处理
+data_tmp = data.groupby('content').agg({'label':lambda x : set(x)}).reset_index()
 # [[1,0,0],[0,1,0],[0,0,1]]
 # 可能有多标签则[[1,1,0],[0,1,0],[0,0,1]]
 mlb = MultiLabelBinarizer()
-y_train = mlb.fit_transform(labels)
-content_list = [jieba.lcut(str(c)) for c in conts]
-word_set = set([word for row in list(content_list) for word in row])
+data_tmp['hh'] = mlb.fit_transform(data_tmp.label).tolist()
+y_train = np.array(data_tmp.hh.tolist())
+# 构造embedding字典
+bow = BOW(data_tmp.content.apply(jieba.lcut).tolist(), min_count=1, maxlen=100)
 
-word2index = {w: i + 1 for i, w in enumerate(word_set)}
-seqs = [[word2index[w] for w in l] for l in content_list]
-
-word2vec = Word2Vec(data.content.apply(jieba.lcut).tolist(),size=300,min_count=1)
+word2vec = Word2Vec(a.content.apply(jieba.lcut).tolist(),size=300,min_count=1)
 
 word_embed_dict = {}
 def get_word_embed_dict():
@@ -72,26 +58,14 @@ def get_word_embed_dict():
         word_embed_dict[i] = word2vec.wv.get_vector(i).tolist()
     return word_embed_dict
 word_embed_dict = get_word_embed_dict()
+vocab_size = len(word_embed_dict)
+embedding_matrix = np.zeros((vocab_size+1,300))
 
-EMBEDDING_DIM = 300
-embedding_matrix = np.zeros((len(word2index) + 1, EMBEDDING_DIM))
-for word, i in word2index.items():
-    embedding_vector = word_embed_dict.get(word)
-    if embedding_vector is not None:
-        embedding_matrix[i] = embedding_vector
-        
-max_features = len(word_set) + 1
+for key, value in bow.word2idx.items():
+    embedding_matrix[value] = word_embed_dict.get(key)
 
-# # 保存成embedding_matrix.npy，后面跑神经网络的时候会读取，如果用另一种加载方式则不需要先存成文件
-# np.save('../save/embedding_matrix',arr=embedding_matrix)
-
-# 长度补齐，这里用的是keras里面的方法，也可以用我自己写的BOW里面的方法，0补在后面，跑双向RNN不影响
-def get_padding_data(maxlen=100):
-    x_train = sequence.pad_sequences(seqs, maxlen=maxlen)
-    return x_train
-maxlen = 100
-X_train = get_padding_data(maxlen).astype(int)
-print(X_train.shape, y_train.shape)
+X_train = bow.doc2num.copy(deep=True)
+y_train = y_train.copy(deep=True)
 
 # 数据处理成tensor
 BATCH_SIZE = 64
