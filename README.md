@@ -7,7 +7,7 @@ CapsNet based on Geoffrey Hinton's original paper
 
 ## Requirements
 
- - python
+ - python 3.6+
  - gensim
  - tqdm
  - pytorch 0.4.1
