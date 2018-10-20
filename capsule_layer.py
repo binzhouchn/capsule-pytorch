@@ -18,7 +18,8 @@ import numpy as np
 USE_CUDA = True
 vocab_size = 17327
 embedding_dim = 300
-embedding_path = '../save/embedding_matrix.npy'
+embedding_path = '../save/embedding_matrix.npy' # or False, not use pre-trained-matrix
+use_pretrained_embedding = True
 BATCH_SIZE = 64
 gru_len = 128
 Routings = 5
@@ -33,11 +34,12 @@ num_classes = 30
 
 class Embed_Layer(nn.Module):
     
-    def __init__(self, embedding_dim=300):
+    def __init__(self, embedding_matrix=None, embedding_dim=300):
         super(Embed_Layer, self).__init__()
         self.encoder = nn.Embedding(vocab_size+1,embedding_dim)
-        if embedding_path:
-            self.encoder.weight.data.copy_(t.from_numpy(np.load(embedding_path)))
+        if use_pretrained_embedding:
+            # self.encoder.weight.data.copy_(t.from_numpy(np.load(embedding_path))) # 方法一，加载np.save的npy文件
+            self.encoder.weight.data.copy_(t.from_numpy(embedding_matrix)) # 方法二
     def forward(self, x, rate_drop_dense=0.28):
         return nn.Dropout(p=rate_drop_dense)(self.encoder(x))
 
@@ -128,9 +130,9 @@ class Dense_Layer(nn.Module):
 # 如果就用在分类里面，decoder用不到，不需要reconstruction
 
 class Capsule_Main(nn.Module):
-    def __init__(self):
+    def __init__(self, embedding_matrix=None):
         super(Capsule_Main, self).__init__()
-        self.embed_layer = Embed_Layer()
+        self.embed_layer = Embed_Layer(embedding_matrix)
         self.gru_layer = GRU_Layer()
         self.caps_layer = Caps_Layer()
         self.dense_layer = Dense_Layer()

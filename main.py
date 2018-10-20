@@ -82,8 +82,8 @@ for word, i in word2index.items():
         
 max_features = len(word_set) + 1
 
-# 保存成embedding_matrix.npy，后面跑神经网络的时候会读取
-np.save('../save/embedding_matrix',arr=embedding_matrix)
+# # 保存成embedding_matrix.npy，后面跑神经网络的时候会读取，如果用另一种加载方式则不需要先存成文件
+# np.save('../save/embedding_matrix',arr=embedding_matrix)
 
 # 长度补齐，这里用的是keras里面的方法，也可以用我自己写的BOW里面的方法，0补在后面，跑双向RNN不影响
 def get_padding_data(maxlen=100):
@@ -107,7 +107,7 @@ train_loader = Data.DataLoader(
     )
 
 # 网络结构、损失函数、优化器初始化
-capnet = Capsule_Main()
+capnet = Capsule_Main(embedding_matrix) # 加载预训练embedding matrix
 loss_func = nn.BCELoss() # 用二分类方法预测是否属于该类，而非多分类
 if USE_CUDA:
     capnet = capnet.cuda() # 把搭建的网络载入GPU
