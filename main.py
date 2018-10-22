@@ -20,12 +20,11 @@ from collections import Counter
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 # tfidf or countvec for lr or svm
 from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVR
+from sklearn.svm import SVC
 from sklearn.model_selection import StratifiedKFold
 from tqdm import tqdm, tqdm_notebook
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics import accuracy_score
-from keras.preprocessing import text, sequence
 
 from m import f1_for_car, BOW, BasicModule
 from capsule_layer import *
