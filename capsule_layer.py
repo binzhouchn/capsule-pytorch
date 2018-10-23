@@ -55,7 +55,7 @@ class GRU_Layer(nn.Module):
 
 # core caps_layer with squash func
 class Caps_Layer(nn.Module):
-    def __init__(self, input_dim_capsule =gru_len*2, num_capsule=Num_capsule, dim_capsule=Dim_capsule, \
+    def __init__(self, input_dim_capsule=gru_len*2, num_capsule=Num_capsule, dim_capsule=Dim_capsule, \
                  routings=Routings, kernel_size=(9, 1), share_weights=True,
                 activation='default',**kwargs):
         super(Caps_Layer, self).__init__(**kwargs)
