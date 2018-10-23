@@ -16,7 +16,6 @@ import numpy as np
 
 
 USE_CUDA = True
-vocab_size = 17327
 embedding_dim = 300
 embedding_path = '../save/embedding_matrix.npy' # or False, not use pre-trained-matrix
 use_pretrained_embedding = True
@@ -34,7 +33,7 @@ num_classes = 30
 
 class Embed_Layer(nn.Module):
     
-    def __init__(self, embedding_matrix=None, embedding_dim=300):
+    def __init__(self, embedding_matrix=None, vocab_size=None, embedding_dim=300):
         super(Embed_Layer, self).__init__()
         self.encoder = nn.Embedding(vocab_size+1,embedding_dim)
         if use_pretrained_embedding:
@@ -130,9 +129,9 @@ class Dense_Layer(nn.Module):
 # 如果就用在分类里面，decoder用不到，不需要reconstruction
 
 class Capsule_Main(nn.Module):
-    def __init__(self, embedding_matrix=None):
+    def __init__(self, embedding_matrix=None, vocab_size=None):
         super(Capsule_Main, self).__init__()
-        self.embed_layer = Embed_Layer(embedding_matrix)
+        self.embed_layer = Embed_Layer(embedding_matrix, vocab_size)
         self.gru_layer = GRU_Layer()
         self.caps_layer = Caps_Layer()
         self.dense_layer = Dense_Layer()
