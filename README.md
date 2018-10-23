@@ -11,7 +11,7 @@ CapsNet based on Geoffrey Hinton's original paper
  - gensim
  - tqdm
  - pytorch 0.4.1
- 
+  
 ## Run
 
 ```bash
