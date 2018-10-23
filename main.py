@@ -25,6 +25,7 @@ from sklearn.model_selection import StratifiedKFold
 from tqdm import tqdm, tqdm_notebook
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics import accuracy_score
+import copy
 
 from m import f1_for_car, BOW, BasicModule
 from capsule_layer import *
@@ -62,8 +63,8 @@ embedding_matrix = np.zeros((vocab_size+1,300))
 for key, value in bow.word2idx.items():
     embedding_matrix[value] = word_embed_dict.get(key)
 
-X_train = bow.doc2num.copy(deep=True)
-y_train = y_train.copy(deep=True)
+X_train = copy.deepcopy(bow.doc2num)
+y_train = copy.deepcopy(y_train)
 
 # 数据处理成tensor
 BATCH_SIZE = 64
