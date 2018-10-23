@@ -47,24 +47,26 @@ data_tmp = data.groupby('content').agg({'label':lambda x : set(x)}).reset_index(
 mlb = MultiLabelBinarizer()
 data_tmp['hh'] = mlb.fit_transform(data_tmp.label).tolist()
 y_train = np.array(data_tmp.hh.tolist())
+
 # 构造embedding字典
+
 bow = BOW(data_tmp.content.apply(jieba.lcut).tolist(), min_count=1, maxlen=100) # 长度补齐或截断固定长度100
 
-word2vec = Word2Vec(data_tmp.content.apply(jieba.lcut).tolist(),size=300,min_count=1)
-word_embed_dict = {}
-def get_word_embed_dict():
-    for i in word2vec.wv.vocab:
-        word_embed_dict[i] = word2vec.wv.get_vector(i).tolist()
-    return word_embed_dict
-word_embed_dict = get_word_embed_dict()
-vocab_size = len(word_embed_dict)
-embedding_matrix = np.zeros((vocab_size+1,300))
+# word2vec = Word2Vec(data_tmp.content.apply(jieba.lcut).tolist(),size=300,min_count=1)
+word2vec = gensim.models.KeyedVectors.load_word2vec_format('data/ft_wv.txt') # 读取txt文件的预训练词向量
 
+vocab_size = len(bow.word2idx)
+word2vec = gensim.models.KeyedVectors.load_word2vec_format('data/ft_wv.txt')
+embedding_matrix = np.zeros((vocab_size+1, 300))
 for key, value in bow.word2idx.items():
-    embedding_matrix[value] = word_embed_dict.get(key)
+    if key in word2vec.vocab: # Word2Vec训练得到的的实例需要word2vec.wv.vocab
+        embedding_matrix[value] = word2vec.get_vector(key)
+    else:
+        embedding_matrix[value] = [0] * embedding_dim
 
 X_train = copy.deepcopy(bow.doc2num)
 y_train = copy.deepcopy(y_train)
+#--------------------------------------------
 
 # 数据处理成tensor
 BATCH_SIZE = 64
