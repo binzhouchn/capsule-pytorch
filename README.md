@@ -14,7 +14,7 @@ CapsNet based on Geoffrey Hinton's original paper
  
 ## Run
 
-```python
+```bash
 python main.py
 ```
 Train and test dataset should be included in data folder
