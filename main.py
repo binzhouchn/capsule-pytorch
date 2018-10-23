@@ -56,7 +56,6 @@ bow = BOW(data_tmp.content.apply(jieba.lcut).tolist(), min_count=1, maxlen=100) 
 word2vec = gensim.models.KeyedVectors.load_word2vec_format('data/ft_wv.txt') # 读取txt文件的预训练词向量
 
 vocab_size = len(bow.word2idx)
-word2vec = gensim.models.KeyedVectors.load_word2vec_format('data/ft_wv.txt')
 embedding_matrix = np.zeros((vocab_size+1, 300))
 for key, value in bow.word2idx.items():
     if key in word2vec.vocab: # Word2Vec训练得到的的实例需要word2vec.wv.vocab
