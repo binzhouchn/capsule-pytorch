@@ -81,7 +81,7 @@ train_loader = Data.DataLoader(
     )
 
 # 网络结构、损失函数、优化器初始化
-capnet = Capsule_Main(embedding_matrix) # 加载预训练embedding matrix
+capnet = Capsule_Main(embedding_matrix,vocab_size) # 加载预训练embedding matrix
 loss_func = nn.BCELoss() # 用二分类方法预测是否属于该类，而非多分类
 if USE_CUDA:
     capnet = capnet.cuda() # 把搭建的网络载入GPU
