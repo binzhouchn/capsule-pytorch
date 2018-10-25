@@ -46,9 +46,8 @@ class GRU_Layer(nn.Module):
     
     def __init__(self):
         super(GRU_Layer, self).__init__()
-        self.gru = nn.GRU(input_size=300,
+        self.gru = nn.GRU(input_size=embedding_dim,
                          hidden_size=gru_len,
-                         dropout=dropout_p,
                          bidirectional=True)     
     def forward(self, x):
         return self.gru(x)
@@ -71,9 +70,10 @@ class Caps_Layer(nn.Module):
             self.activation = nn.ReLU(inplace=True)
         
         if self.share_weights:
-            self.W = nn.Parameter(torch.randn(1, input_dim_capsule,self.num_capsule * self.dim_capsule))
+            self.W = nn.Parameter(
+                nn.init.xavier_normal_(torch.empty(1, input_dim_capsule, self.num_capsule * self.dim_capsule)))
         else:
-            self.W = nn.Parameter(torch.randn(64, input_dim_capsule,self.num_capsule * self.dim_capsule)) #64即batch_size
+            self.W = nn.Parameter(nn.init.xavier_normal_(torch.empty(64, input_dim_capsule,self.num_capsule * self.dim_capsule))) #64即batch_size
 
     def forward(self, x):
         
