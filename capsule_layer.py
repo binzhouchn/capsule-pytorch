@@ -91,7 +91,7 @@ class Caps_Layer(nn.Module):
         
         for i in range(self.routings):
             b = b.permute(0, 2, 1)
-            c = F.softmax(b)
+            c = F.softmax(b, dim=2)
             c = c.permute(0, 2, 1)
             b = b.permute(0, 2, 1)
             outputs = self.activation(torch.einsum('bij,bijk->bik', (c, u_hat_vecs))) # batch matrix multiplication
