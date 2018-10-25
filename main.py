@@ -9,6 +9,7 @@ import torch
 import torch.utils.data as Data
 import torch as t
 from torch import nn
+from torch.optim import Adam
 import torch.nn.functional as F
 import numpy as np
 import pandas as pd
