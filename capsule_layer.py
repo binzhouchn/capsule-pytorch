@@ -122,7 +122,7 @@ class Dense_Layer(nn.Module):
         self.fc = nn.Sequential(
             nn.Dropout(p=dropout_p, inplace=True),
             nn.Linear(Num_capsule * Dim_capsule, num_classes),  # num_capsule*dim_capsule -> num_classes
-            nn.Sigmoid(dim=-1)
+            nn.Sigmoid()
         )
 
     def forward(self, x):
