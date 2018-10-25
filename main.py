@@ -5,7 +5,6 @@ author = 'BinZhou'
 nick_name = '发送小信号'
 mtime = '2018/10/19'
 
-import torch
 import torch.utils.data as Data
 import torch as t
 from torch import nn
@@ -70,8 +69,8 @@ y_train = copy.deepcopy(y_train)
 
 # 数据处理成tensor
 BATCH_SIZE = 64
-label_tensor = torch.from_numpy(np.array(y_train)).float()
-content_tensor = torch.from_numpy(np.array(X_train)).long()
+label_tensor = t.from_numpy(np.array(y_train)).float()
+content_tensor = t.from_numpy(np.array(X_train)).long()
 
 torch_dataset = Data.TensorDataset(content_tensor, label_tensor)
 train_loader = Data.DataLoader(
