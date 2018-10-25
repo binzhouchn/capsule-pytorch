@@ -108,7 +108,7 @@ class Caps_Layer(nn.Module):
     
 #     # original one for image decoder
 #     def squash(self, input_tensor):
-#         squared_norm = (input_tensor ** 2).sum(-1, keepdim=True)
+#         squared_norm = (input_tensor ** 2).sum(-1, keepdim=True) + T_epsilon
 #         output_tensor = squared_norm *  input_tensor / ((1. + squared_norm) * torch.sqrt(squared_norm))
 #         return output_tensor
 
