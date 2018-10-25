@@ -5,14 +5,9 @@ author = 'BinZhou'
 nick_name = '发送小信号'
 mtime = '2018/10/19'
 
-import torch
 import torch as t
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd import Variable
-from torch.optim import Adam
-from torchvision import datasets, transforms
-import numpy as np
 
 
 USE_CUDA = True
@@ -71,14 +66,14 @@ class Caps_Layer(nn.Module):
         
         if self.share_weights:
             self.W = nn.Parameter(
-                nn.init.xavier_normal_(torch.empty(1, input_dim_capsule, self.num_capsule * self.dim_capsule)))
+                nn.init.xavier_normal_(t.empty(1, input_dim_capsule, self.num_capsule * self.dim_capsule)))
         else:
-            self.W = nn.Parameter(nn.init.xavier_normal_(torch.empty(64, input_dim_capsule,self.num_capsule * self.dim_capsule))) #64即batch_size
+            self.W = nn.Parameter(nn.init.xavier_normal_(t.empty(64, input_dim_capsule,self.num_capsule * self.dim_capsule))) #64即batch_size
 
     def forward(self, x):
         
         if self.share_weights:
-            u_hat_vecs = torch.matmul(x, self.W)
+            u_hat_vecs = t.matmul(x, self.W)
         else:
             print('add later')
             
@@ -87,29 +82,29 @@ class Caps_Layer(nn.Module):
         u_hat_vecs = u_hat_vecs.view((batch_size, input_num_capsule,
                                             self.num_capsule, self.dim_capsule))
         u_hat_vecs = u_hat_vecs.permute(0, 2, 1, 3) # 转成(batch_size,num_capsule,input_num_capsule,dim_capsule)
-        b = torch.zeros_like(u_hat_vecs[:, :, :, 0]) # (batch_size,num_capsule,input_num_capsule)
+        b = t.zeros_like(u_hat_vecs[:, :, :, 0]) # (batch_size,num_capsule,input_num_capsule)
         
         for i in range(self.routings):
             b = b.permute(0, 2, 1)
             c = F.softmax(b, dim=2)
             c = c.permute(0, 2, 1)
             b = b.permute(0, 2, 1)
-            outputs = self.activation(torch.einsum('bij,bijk->bik', (c, u_hat_vecs))) # batch matrix multiplication
+            outputs = self.activation(t.einsum('bij,bijk->bik', (c, u_hat_vecs))) # batch matrix multiplication
             # outputs shape (batch_size, num_capsule, dim_capsule)
             if i < self.routings - 1:
-                b = torch.einsum('bik,bijk->bij', (outputs, u_hat_vecs)) # batch matrix multiplication
+                b = t.einsum('bik,bijk->bij', (outputs, u_hat_vecs)) # batch matrix multiplication
         return outputs # (batch_size, num_capsule, dim_capsule)
     
     # text version of squash, slight different from original one
     def squash(self, x, axis=-1):
         s_squared_norm  = (x ** 2).sum(axis, keepdim=True)
-        scale = torch.sqrt(s_squared_norm + T_epsilon)
+        scale = t.sqrt(s_squared_norm + T_epsilon)
         return x / scale
     
 #     # original one for image decoder
 #     def squash(self, input_tensor):
 #         squared_norm = (input_tensor ** 2).sum(-1, keepdim=True) + T_epsilon
-#         output_tensor = squared_norm *  input_tensor / ((1. + squared_norm) * torch.sqrt(squared_norm))
+#         output_tensor = squared_norm *  input_tensor / ((1. + squared_norm) * t.sqrt(squared_norm))
 #         return output_tensor
 
 class Dense_Layer(nn.Module):
