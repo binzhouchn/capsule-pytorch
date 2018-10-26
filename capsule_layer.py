@@ -45,8 +45,10 @@ class GRU_Layer(nn.Module):
         self.gru = nn.GRU(input_size=300,
                           hidden_size=gru_len,
                           bidirectional=True)
-        # 自己修改GRU里面的激活函数及加dropout和recurrent_dropout
-        # 如果要使用，把rnn_revised import进来，但好像使用cpu跑的，比较慢
+        '''
+        自己修改GRU里面的激活函数及加dropout和recurrent_dropout
+        如果要使用，把rnn_revised import进来，但好像是使用cpu跑的，比较慢
+       '''
         # self.gru = RNNHardSigmoid('GRU', input_size=300,
         #                           hidden_size=gru_len,
         #                           bidirectional=True)

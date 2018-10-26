@@ -246,16 +246,13 @@ class RNNHardSigmoid(Module):
     def all_weights(self):
         return [[getattr(self, weight) for weight in weights] for weights in self._all_weights]
 
+#
 
 def AutogradRNN(mode, input_size, hidden_size, num_layers=1, batch_first=False,
                 dropout=0, train=True, bidirectional=False, variable_length=False,
                 dropout_state=None, flat_weight=None):
 
-    if mode == 'RNN_RELU':
-        cell = RNNReLUCell
-    elif mode == 'RNN_TANH':
-        cell = RNNTanhCell
-    elif mode == 'LSTM':
+    if mode == 'LSTM':
         cell = LSTMCell
     elif mode == 'GRU':
         cell = GRUCell
