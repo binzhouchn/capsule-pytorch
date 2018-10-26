@@ -9,6 +9,8 @@ import torch as t
 import torch.nn as nn
 import torch.nn.functional as F
 
+
+
 USE_CUDA = True
 embedding_dim = 300
 embedding_path = '../save/embedding_matrix.npy'  # or False, not use pre-trained-matrix
@@ -43,6 +45,10 @@ class GRU_Layer(nn.Module):
         self.gru = nn.GRU(input_size=300,
                           hidden_size=gru_len,
                           bidirectional=True)
+        # 自己修改GRU里面的激活函数及加dropout和recurrent_dropout
+        self.gru = RNNHardSigmoid('GRU', input_size=300,
+                                  hidden_size=gru_len,
+                                  bidirectional=True)
 
     # 这步很关键，需要像keras一样用glorot_uniform和orthogonal_uniform初始化参数
     def init_weights(self):
