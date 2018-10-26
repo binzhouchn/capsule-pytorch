@@ -58,12 +58,12 @@ class GRU_Layer(nn.Module):
         ih = (param.data for name, param in self.named_parameters() if 'weight_ih' in name)
         hh = (param.data for name, param in self.named_parameters() if 'weight_hh' in name)
         b = (param.data for name, param in self.named_parameters() if 'bias' in name)
-        for t in ih:
-            nn.init.xavier_uniform_(t)
-        for t in hh:
-            nn.init.orthogonal_(t)
-        for t in b:
-            nn.init.constant_(t, 0)
+        for k in ih:
+            nn.init.xavier_uniform_(k)
+        for k in hh:
+            nn.init.orthogonal_(k)
+        for k in b:
+            nn.init.constant_(k, 0)
 
     def forward(self, x):
         return self.gru(x)
