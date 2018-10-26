@@ -9,7 +9,7 @@ import torch as t
 import torch.nn as nn
 import torch.nn.functional as F
 
-
+# from rnn_revised import *
 
 USE_CUDA = True
 embedding_dim = 300
@@ -46,9 +46,10 @@ class GRU_Layer(nn.Module):
                           hidden_size=gru_len,
                           bidirectional=True)
         # 自己修改GRU里面的激活函数及加dropout和recurrent_dropout
-        self.gru = RNNHardSigmoid('GRU', input_size=300,
-                                  hidden_size=gru_len,
-                                  bidirectional=True)
+        # 如果要使用，把rnn_revised import进来，但好像使用cpu跑的，比较慢
+        # self.gru = RNNHardSigmoid('GRU', input_size=300,
+        #                           hidden_size=gru_len,
+        #                           bidirectional=True)
 
     # 这步很关键，需要像keras一样用glorot_uniform和orthogonal_uniform初始化参数
     def init_weights(self):

@@ -6,7 +6,7 @@
 """
 
 author = 'BinZhou'
-nick_name = '·¢ËÍĞ¡ĞÅºÅ'
+nick_name = 'å‘é€å°ä¿¡å·'
 mtime = '2018/10/26'
 
 from __future__ import print_function, division
@@ -470,13 +470,13 @@ def GRUCell(input, hidden, w_ih, w_hh, b_ih=None, b_hh=None):
 
     resetgate = hard_sigmoid(i_r + h_r)
     inputgate = hard_sigmoid(i_i + h_i)
-    # tanh¸Ä³ÉÁËrelu
+    # tanhï¿½Ä³ï¿½ï¿½ï¿½relu
     newgate = torch.relu(i_n + resetgate * h_n)
     hy = newgate + inputgate * (hidden - newgate)
 
     return hy
 
-# ×Ô¼º¶¨ÒåµÄhard_sigmoidº¯Êı
+# ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hard_sigmoidï¿½ï¿½ï¿½ï¿½
 def hard_sigmoid(x):
     """
     Computes element-wise hard sigmoid of x.
