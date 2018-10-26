@@ -246,7 +246,8 @@ class RNNHardSigmoid(Module):
     def all_weights(self):
         return [[getattr(self, weight) for weight in weights] for weights in self._all_weights]
 
-#
+# if cudnn.is_acceptable(input.data)为True的时候用CudnnRNN跑的，而不是AutogradRNN
+# 但是CudnnRNN里面修改不了GRU或LSTMcell，不是用python写的，好像是动态链接.so文件
 
 def AutogradRNN(mode, input_size, hidden_size, num_layers=1, batch_first=False,
                 dropout=0, train=True, bidirectional=False, variable_length=False,
@@ -467,13 +468,13 @@ def GRUCell(input, hidden, w_ih, w_hh, b_ih=None, b_hh=None):
 
     resetgate = hard_sigmoid(i_r + h_r)
     inputgate = hard_sigmoid(i_i + h_i)
-    # tanh�ĳ���relu
+    # tanh修改成了relu
     newgate = torch.relu(i_n + resetgate * h_n)
     hy = newgate + inputgate * (hidden - newgate)
 
     return hy
 
-# �Լ������hard_sigmoid����
+# 这里用了hard_sigmoid激活函数
 def hard_sigmoid(x):
     """
     Computes element-wise hard sigmoid of x.
