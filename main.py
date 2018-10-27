@@ -15,7 +15,6 @@ import pandas as pd
 import jieba
 import gensim
 from gensim.models import Word2Vec, FastText
-import re
 from collections import Counter
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 # tfidf or countvec for lr or svm
