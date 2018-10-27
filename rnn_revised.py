@@ -468,8 +468,8 @@ def GRUCell(input, hidden, w_ih, w_hh, b_ih=None, b_hh=None):
 
     resetgate = hard_sigmoid(i_r + h_r)
     inputgate = hard_sigmoid(i_i + h_i)
-    # tanh修改成了relu
-    newgate = torch.relu(i_n + resetgate * h_n)
+    # 可以用relu或其他激活函数 instead of tanh
+    newgate = torch.tanh(i_n + resetgate * h_n)
     hy = newgate + inputgate * (hidden - newgate)
 
     return hy
