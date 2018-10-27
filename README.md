@@ -24,6 +24,6 @@ If you need hard_sigmoid for GRU gate, just uncomment
 from rnn_revised import *
 ```
 in capsule_layer.py. You can also use whatever activation func 
-or recurrent_drop ratio you want and revise in rnn_revised.py doc. 
+or dropout/recurrent_dropout ratio you want and revise in rnn_revised.py doc. 
 One more thing, the revise version is non-cuda, if you find a way 
 out for cuda version please let me know.
