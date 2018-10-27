@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ Implement a pyTorch LSTM or GRU with hard sigmoid reccurent activation functions.
-    Adapted from the non-cuda variant of pyTorch LSTM at
+    Adapted from the non-cuda variant of pyTorch LSTM or GRU at
     https://github.com/pytorch/pytorch/blob/master/torch/nn/_functions/rnn.py
 """
 
