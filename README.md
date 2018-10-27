@@ -1,6 +1,4 @@
-# capsule-pytorch
-
-## CapsNet pytorch实现（文本多分类）
+# CapsNet pytorch实现（文本多分类）
 
 CapsNet based on Geoffrey Hinton's original paper 
 [Dynamic Routing Between Capsules](https://arxiv.org/abs/1710.09829)
