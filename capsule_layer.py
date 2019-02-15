@@ -157,7 +157,7 @@ class Capsule_Main(nn.Module):
     def forward(self, content):
         content1 = self.embed_layer(content)
         content2, _ = self.gru_layer(
-            content1)  # 这个输出是个tuple，一个output(seq_len, batch_size, num_directions * hidden_size)，一个hn
+            content1)  # 这个输出是个tuple，一个output(batch_size, seq_len, num_directions * hidden_size)，一个hn
         content3 = self.caps_layer(content2)
         output = self.dense_layer(content3)
         return output
